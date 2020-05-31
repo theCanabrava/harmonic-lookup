@@ -3,6 +3,8 @@ import Harmony from "../types/Harmony";
 import SnippetManager from "../SnippetManager";
 import Naming from "../types/Naming";
 import ValidationError from "../types/ValidationError";
+import Rythm from "../types/Rythm";
+import Expression from "../types/Expression";
 
 export default class SnippetValidator 
 {
@@ -26,7 +28,21 @@ export default class SnippetValidator
         return true;
     }
 
-    static async isUnique(harmony: Harmony): Promise<boolean>
+    static isRythm(rythm: Rythm): boolean
+    {
+        if(rythm.type !== 'rythm') return false;
+        if(rythm.timeSignature.length !== 2) return false;
+        if(rythm.timeSignature[1]%4 !== 0) return false;
+        for(let note of rythm.notation)
+        {
+            if(note.length > 2) return false;
+            const log2 = Math.log2(note[0]);
+            if(log2 !== Math.floor(log2)) return false;
+        }
+        return true;
+    }
+
+    static async isUnique(harmony: Expression): Promise<boolean>
     {
         const duplicates = await SnippetManager.shared.getSnippets({expression: harmony});
         if(duplicates.length > 0) return false;

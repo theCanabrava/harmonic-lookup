@@ -27,7 +27,7 @@ describe('Write Hamony', function()
     it('saves a harmony snippet', async function()
     {
         const id = await writeHarmony(harmony);
-        const result = (await search({expression: harmony}))[1];
+        const result = (await search({expression: harmony}))[0];
         expect(result.id).to.equal(id);
     })
 })

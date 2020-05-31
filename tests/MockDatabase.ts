@@ -18,7 +18,7 @@ export default class MockDatabase implements DatabaseInterface
         expression:
         {
             type: 'harmony',
-            notation: [],
+            notation: [['1', '2', '3']],
         }
     }]
 
@@ -81,7 +81,7 @@ export default class MockDatabase implements DatabaseInterface
         {
             if(query.expression!.type === snippet.expression.type)
             {
-                if(snippet.expression.type === 'harmony')
+                if(snippet.expression.type === 'harmony' || snippet.expression.type === 'rythm')
                 {
                     let push = true;
                     for(let chordIndex in snippet.expression.notation)

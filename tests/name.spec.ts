@@ -16,7 +16,7 @@ const harmony: Harmony =
     scale: 'major',
     notation: 
     [
-        ['1', '3', '5']
+        ['1', '3', '6']
     ]
 }
 
