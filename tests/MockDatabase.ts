@@ -96,6 +96,13 @@ export default class MockDatabase implements DatabaseInterface
                     }
                     if(push) results.push(snippet);
                 }
+                if(snippet.expression.type === 'melody')
+                {
+                    if(snippet.expression.notation.length === query.expression!.notation.length)
+                    {
+                        results.push(snippet);
+                    }
+                } 
             }
         }
     }

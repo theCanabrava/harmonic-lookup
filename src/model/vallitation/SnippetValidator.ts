@@ -5,6 +5,7 @@ import Naming from "../types/Naming";
 import ValidationError from "../types/ValidationError";
 import Rythm from "../types/Rythm";
 import Expression from "../types/Expression";
+import Melody from "../types/Melody";
 
 export default class SnippetValidator 
 {
@@ -33,10 +34,28 @@ export default class SnippetValidator
         if(rythm.type !== 'rythm') return false;
         if(rythm.timeSignature.length !== 2) return false;
         if(rythm.timeSignature[1]%4 !== 0) return false;
+        if(rythm.notation.length <= 0) return false;
         for(let note of rythm.notation)
         {
             if(note.length > 2) return false;
             const log2 = Math.log2(note[0]);
+            if(log2 !== Math.floor(log2)) return false;
+        }
+        return true;
+    }
+
+    static isMelody(melody: Melody): boolean
+    {
+        if(melody.type !== 'melody') return false;
+        if(melody.timeSignature.length !== 2) return false;
+        if(melody.timeSignature[1]%4 !== 0) return false;
+        if(melody.notation.length <= 0) return false;
+        for(let note of melody.notation)
+        {
+            if(!note.duration) return false;
+            if(!note.tuplet) return false;
+            if(!note.degree) return false;
+            const log2 = Math.log2(note.duration);
             if(log2 !== Math.floor(log2)) return false;
         }
         return true;

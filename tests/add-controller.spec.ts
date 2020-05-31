@@ -1,12 +1,13 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { addHarmony, addRythm } from '../src/controllers/addControler';
+import { addHarmony, addRythm, addMelody } from '../src/controllers/addControler';
 
 import MockDatabase from './MockDatabase';
 import SnippetManager from '../src/model/SnippetManager';
 
 import Harmony from '../src/model/types/Harmony';
+import Melody from '../src/model/types/Melody';
 import Rythm from '../src/model/types/Rythm';
 
 const harmony: Harmony = 
@@ -32,6 +33,24 @@ const rythm: Rythm =
     ]
 }
 
+const melody: Melody = 
+{
+    type: 'melody',
+    timeSignature: [4, 4],
+    notation: 
+    [
+        {
+            degree: 'A',
+            duration: 2,
+            tuplet: 2
+        },
+        {
+            degree: 'B',
+            duration: 2,
+            tuplet: 2
+        }
+    ]
+}
 
 describe('Add controller', function()
 {
@@ -100,6 +119,40 @@ describe('Add controller', function()
         for(let noteIndex in rythm.notation)
         {
             expect(rythm.notation[noteIndex][0]).to.equal(rythmStored.notation[noteIndex][0]);
+        }
+    })
+
+    it('Creates a melody snippet', async function()
+    {
+        const res = 
+        {
+            statusCode: 500,
+            snippets: [],
+            status: function(code: number)
+            {
+                this.statusCode = code;
+                return this;
+            },
+            json: function(data: any)
+            {
+                return;
+            }
+        }
+        const req = {body:{name: 'Whole Step', timeSignature: melody.timeSignature, notation: melody.notation}};
+        await addMelody(req, res, () => {})
+
+        expect(res.statusCode).to.equal(200);
+        const melodyStored = MockDatabase.snippets[3].expression as Melody;
+        expect(MockDatabase.snippets[3].id!).to.equal('3');
+        expect(MockDatabase.snippets[3].names[0].value).to.equal('Whole Step');
+        expect(melodyStored.type).to.equal(melody.type);
+        expect(melodyStored.timeSignature).to.equal(melody.timeSignature);
+        expect(melodyStored.notation.length).to.equal(melody.notation.length);
+        for(let noteIndex in melody.notation)
+        {
+            expect(melody.notation[noteIndex].degree).to.equal(melodyStored.notation[noteIndex].degree);
+            expect(melody.notation[noteIndex].duration).to.equal(melodyStored.notation[noteIndex].duration);
+            expect(melody.notation[noteIndex].tuplet).to.equal(melodyStored.notation[noteIndex].tuplet);
         }
     })
 })
