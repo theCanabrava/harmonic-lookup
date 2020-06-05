@@ -12,6 +12,7 @@ import Database from "./database/database";
 
 import search from "./routes/search";
 import add from "./routes/add";
+import name from "./routes/name";
 import error from "./middleware/errorMiddleware";
 
 SnippetManager.shared = new SnippetManager(new Database);
@@ -36,6 +37,7 @@ app.use((req, res, next) =>
 
 app.use(search);
 app.use(add);
+app.use(name);
 
 app.use(error);
 
